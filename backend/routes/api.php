@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,8 +28,10 @@ Route::controller(AuthController::class)->group(function () {
 });
 Route::group(['middleware' => "isAdmin"], function () {
 
+    Route::get('get_teachers_for_admin',[TeacherController::class,'get_teachers_for_admin']);
 });
 Route::group(['middleware' => "isUser"], function () {
+    Route::get('teachers',[TeacherController::class,'get_teachers_for_user']);
 
 });
 Route::group(['middleware' => "isTeacher"], function () {
