@@ -25,3 +25,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('refresh', 'refresh');
 
 });
+Route::group(['middleware' => "isAdmin"], function () {
+
+});
+Route::group(['middleware' => "isUser"], function () {
+
+});
+Route::group(['middleware' => "isTeacher"], function () {
+
+});
