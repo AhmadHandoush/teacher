@@ -17,4 +17,13 @@ class TeacherController extends Controller
         return response()->json(['teachers' => $teachers]);
 
     }
+
+    public function get_users(){
+        $users = User::whereIn('user_role', ['user', 'teacher'])->get();
+        return response()->json([
+            'users'=>$users
+        ]);
+    }
+
+
 }
