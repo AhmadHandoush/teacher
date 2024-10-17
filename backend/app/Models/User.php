@@ -60,5 +60,13 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+    public function connectionsRequested()
+    {
+        return $this->hasMany(Connection::class, 'user_id');  // User requests connection to teachers
+    }
+    public function connectionsReceived()
+    {
+        return $this->hasMany(Connection::class, 'teacher_id');  // Teacher receives connection requests
+    }
 
 }

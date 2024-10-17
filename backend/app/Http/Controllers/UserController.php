@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Connection;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -46,6 +47,35 @@ class UserController extends Controller
         return response()->json(["message"=>"info updated successfully",'data'=> $user]);
 
 
+    }
+    public function requestConnection(Request $request)
+    {
+        $request->validate([
+            'teacher_id' => 'required|exists:users,id',  // Validate teacher's existence
+        ]);
+
+        // Ensure teacher has the role 'teacher'
+        $teacher = User::where('id', $request->teacher_id)->where('user_role', 'teacher')->first();
+        if (!$teacher) {
+            return response()->json(['message' => 'Teacher not found.'], 404);
+        }
+
+        // Check if a connection already exists
+        $existingConnection = Connection::where('user_id', auth()->id())
+            ->where('teacher_id', $request->teacher_id)
+            ->first();
+
+        if ($existingConnection) {
+            return response()->json(['message' => 'Connection request already exists.'], 400);
+        }
+
+        // Create the connection request
+        $connection = Connection::create([
+            'user_id' => auth()->id(),
+            'teacher_id' => $request->teacher_id,
+        ]);
+
+        return response()->json(['message' => 'Connection request sent successfully.', 'data' => $connection], 201);
     }
 
 }

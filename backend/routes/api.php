@@ -42,6 +42,7 @@ Route::group(['middleware' => "isAdmin"], function () {
 // user routes
 Route::group(['middleware' => "isUser"], function () {
     Route::get('teachers',[TeacherController::class,'get_teachers_for_user']);
+    Route::post('request_coonection',[UserController::class,'requestConnection']);
 
 
 });

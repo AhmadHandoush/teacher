@@ -24,6 +24,26 @@ class TeacherController extends Controller
             'users'=>$users
         ]);
     }
+    public function respondToConnection(Request $request, $id)
+{
+    $request->validate([
+        'status' => 'required|in:accepted,rejected',
+    ]);
+
+    $connection = auth()->user()->connectionsReceived()
+        ->where('id', $id)
+        ->first();
+
+    if (!$connection) {
+        return response()->json(['message' => 'Connection not found'], 404);
+    }
+
+    $connection->status = $request->status;
+    $connection->save();
+
+    return response()->json(['message' => 'Connection ' . $request->status]);
+}
+
 
 
 }
