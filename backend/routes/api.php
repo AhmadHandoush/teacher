@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,5 +25,29 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
+
+});
+Route::get('get_user/{id}',[UserController::class,'get_user']);
+Route::post('update_info',[UserController::class,'update_user']);
+
+
+//  admin routes
+Route::group(['middleware' => "isAdmin"], function () {
+
+    Route::get('get_teachers_for_admin',[TeacherController::class,'get_teachers_for_admin']);
+    Route::get('get_users_teachers',[TeacherController::class,'get_users']);
+});
+
+
+// user routes
+Route::group(['middleware' => "isUser"], function () {
+    Route::get('teachers',[TeacherController::class,'get_teachers_for_user']);
+    Route::post('request_coonection',[UserController::class,'requestConnection']);
+
+
+});
+
+// teacher routes
+Route::group(['middleware' => "isTeacher"], function () {
 
 });
